@@ -6,8 +6,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>موقع عقارات
-
+    <title>{{getSetting('sitename')}}
+|
         @yield('title')
 
     </title>
@@ -27,6 +27,8 @@
 <link href="{{asset("website/css/style.css")}}" rel="stylesheet" />
 <link rel="stylesheet" href="{{asset("website/css/font-awesome.min.css")}}"/>
 <script src="{{asset("website/js/jquery.min.js")}}"></script>
+<link href="{{asset('cus/css/select2.min.css')}}" rel="stylesheet"  >
+
 
 
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
@@ -43,6 +45,9 @@
     <div class="menu pull-left"> <a class="toggleMenu" href="#"><img src="{{asset("website/images/nav_icon.png")}}" alt="image" /> </a>
       <ul class="nav" id="nav">
         <li class="current"><a href="{{route('home')}}">الرئيسية</a></li>
+        <li ><a href="{{route('allBu')}}">عرض العقارات</a></li>
+
+
         <li><a href="about.html">من نحن</a></li>
         <li><a href="services.html">خدماتنا</a></li>
         <li><a href="contact.html">اتصل بنا</a></li>
@@ -107,12 +112,22 @@
     <footer>
         <div class="footer">
   <div class="footer_bottom">
-    <div class="follow-us"> <a class="fa fa-facebook social-icon" href="#"></a> <a class="fa fa-twitter social-icon" href="#"></a> <a class="fa fa-linkedin social-icon" href="#"></a> <a class="fa fa-google-plus social-icon" href="#"></a> </div>
+    <div class="follow-us"> <a class="fa fa-facebook social-icon" href="{{getSetting('facebook')}}"></a> <a class="fa fa-linkedin social-icon" href="{{getSetting('linkedin')}}"></a> <a class="fa fa-youtube social-icon" href="{{getSetting('youtube')}}"></a> </div>
     <div class="copy">
       <p>Copyright &copy; 2015 Company Name. Design by <a href="http://www.templategarden.com" rel="nofollow">TemplateGarden</a></p>
     </div>
   </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
+
+<script src="{{asset('cus/js/select2.min.js')}}"></script>
+<script>
+$(document).ready(function() {
+    $('.select2').select2({
+        dir:'rtl'
+    });
+});
+</script>
 
             @yield('footer')
 </footer>

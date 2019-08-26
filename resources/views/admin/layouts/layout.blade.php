@@ -34,6 +34,9 @@
   <link rel="stylesheet" href="{{asset('admin/bower_components/bootstrap-daterangepicker/daterangepicker.css')}}">
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="{{asset('admin/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}}">
+  <link rel="stylesheet" href="{{asset('admin/cus/dist/sweetalert2.min.css')}}">
+  <script src="{{asset('admin/cus/dist/sweetalert2.all.min.js')}}"></script>
+<script src="{{asset('admin/cus/dist/sweetalert2.min.js')}}"></script>
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -45,6 +48,7 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
+{{-- <link rel="stylesheet" href="sweetalert2/dist/sweetalert2.min.css"> --}}
 
   @yield('header')
 </head>
@@ -353,6 +357,8 @@
 
   <div class="control-sidebar-bg"></div>
   <div class="content-wrapper">
+@include('admin.layouts.message')
+
   @yield('content')
 </div>
     <footer class="main-footer">
@@ -405,6 +411,8 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('admin/dist/js/demo.js')}}"></script>
 
+{{-- <script src="sweetalert2/dist/sweetalert2.all.min.js"></script>
+<script src="sweetalert2/dist/sweetalert2.min.js"></script> --}}
 @yield('footer')
 </body>
 </html>

@@ -27,18 +27,18 @@ class siteSettingSeeder extends Seeder
 
         ]);
         SiteSetting::create([
-            'slug' => 'الفيس بوك', 'namesetting' => 'facebook'
+            'slug' => 'الفيس بوك', 'value' => 'https://www.facebook.com/profile.php?id=100012880806990', 'namesetting' => 'facebook'
 
         ]);
         SiteSetting::create([
-            'slug' => 'تويتر', 'namesetting' => 'twitter'
+            'slug' => 'لينكد ان', 'value' => 'https://www.linkedin.com/in/muhammed-mohsen98/', 'namesetting' => 'linkedin'
 
         ]);
         SiteSetting::create([
             'slug' => 'العنوان', 'namesetting' => 'address',
         ]);
         SiteSetting::create([
-            'slug' => 'يوتيوب', 'namesetting' => 'YouTube'
+            'slug' => 'يوتيوب', 'value' => 'https://www.youtube.com/results?search_query=%D9%85%D8%B4%D8%A7%D8%B1%D9%8A+%D8%A7%D9%84%D8%B9%D9%81%D8%A7%D8%B3%D9%8A+%D9%85%D8%B9+%D8%A7%D9%84%D9%84%D9%87', 'namesetting' => 'YouTube'
 
         ]);
         SiteSetting::create([

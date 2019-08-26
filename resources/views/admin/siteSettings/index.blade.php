@@ -33,6 +33,8 @@
             <!-- /.box-header -->
             <div class="box-body">
 
+
+
 <form action="{{route('siteSetting.save')}}" method="POST">
 @csrf
               @foreach ($siteSettings as $setting)

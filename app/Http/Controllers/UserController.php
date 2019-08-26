@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Bu;
 use Illuminate\Http\Request;
 use App\Http\Requests\users\AddUserRequest;
 use Datatables;
@@ -105,10 +106,13 @@ class UserController extends Controller
         session()->flash('success', 'تم الحذف بنجاح');
         return redirect()->back();
     }
-    public function delete(User $user)
+    public function delete($id, User $user)
     {
         // dd($user);
-        $user->delete();
+        // dd(Bu::where('user_id', $id)->get())
+        $user->find($id)->delete();
+        Bu::where('user_id', $id)->delete();
+
         session()->flash('success', 'تم الحذف بنجاح');
         return redirect()->back();
     }
