@@ -18,6 +18,7 @@ class UserTableSeeder extends Seeder
             'password' => bcrypt(
                 'muhammed'
             ),
+            'image' => 'user/download.png',
             'admin' => 1
         ]);
         User::create([
@@ -25,6 +26,7 @@ class UserTableSeeder extends Seeder
             'email' => 'mustafa.mohsen43@gmail.com',
             'password' => bcrypt('mustafa'),
             'admin' => 1,
+            'image' => 'user/download.png',
 
 
         ]);
@@ -32,6 +34,7 @@ class UserTableSeeder extends Seeder
             'name' => 'saeed',
             'email' => 'saeed.muhammed@gmail.com',
             'password' => bcrypt('saaed'),
+            'image' => 'user/download.png'
 
         ]);
     }

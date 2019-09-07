@@ -18,7 +18,7 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{route('admin')}}"><i class="fa fa-dashboard"></i> الرئيسية</a></li>
-        <li class="active"><a href="{{route('bu.index')}}">التحكم فى العقارات</a></li>
+        <li class="active"><a href="{{route('buindex')}}">التحكم فى العقارات</a></li>
         <li class="active"><a href="{{route('bu.create')}}">اضافة عقار جديد</a></li>
 
       </ol>
@@ -33,7 +33,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
- <form method="POST" action="{{ route('bu.store') }}">
+ <form method="POST" enctype="multipart/form-data" action="{{ route('bu.store') }}">
                 @include('admin.bu.form')
  </form>
                 </div>

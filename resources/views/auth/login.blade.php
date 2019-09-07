@@ -7,7 +7,7 @@
 @section('content')
 <div class="container">
 <div class="contact_bottom">
-    <hr>
+    <h3>
     <h3>تسجيل الدخول</h3>
     <hr>
                     <form method="POST" action="{{ route('login') }}">

@@ -13,7 +13,8 @@
 
 @section('content')
 
-  <div class="content-wrapper">
+
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
@@ -44,6 +45,7 @@
             <th>اسم العضو</th>
             <th>الايميل</th>
             <th>تاريخ التسجيل</th>
+            <th>عقاراتى</th>
             <th>الصلاحيات</th>
             <th>التحكم</th>
 
@@ -71,10 +73,11 @@
             </tbody>
                 <tfoot>
                 <tr>
-             <th>رقم العضو</th>
+            <th>رقم العضو</th>
             <th>اسم العضو</th>
             <th>الايميل</th>
             <th>تاريخ التسجيل</th>
+            <th>عقاراتى</th>
             <th>الصلاحيات</th>
             <th>التحكم</th>
                 </tr>
@@ -93,7 +96,7 @@
       <!-- /.row -->
     </section>
     <!-- /.content -->
-  </div>
+
 
 @endsection
 
@@ -127,7 +130,7 @@
                 var classname = $(this).index() == 6  ?  'date' : 'dateslash';
                 var title = $(this).html();
                 $(this).html( '<input type="text" class="' + classname + '" data-value="'+ $(this).index() +'" placeholder=" البحث '+title+'" />' );
-            }else if($(this).index() == 4){
+            }else if($(this).index() == 5){
                 $(this).html( '<select><option value="0"> عضو </option><option value="1"> مدير الموقع </option></select>' );
             }
 
@@ -136,12 +139,13 @@
         var table = $('#data').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ url('/adminpanel/users/data') }}',
+            ajax: '{{ url('/adminpanel/users/data')}}',
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'name', name: 'name'},
                 {data: 'email', name: 'email'},
                 {data: 'created_at', name: 'created_at'},
+                {data: 'mybu', name: 'mybu'},
                 {data: 'admin', name: 'admin'},
               //  {data: 'exame', name: 'exame'},
                 {data: 'control', name: ''}

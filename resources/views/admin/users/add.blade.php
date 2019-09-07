@@ -33,7 +33,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
- <form method="POST" action="{{ route('users.store') }}">
+ <form method="POST" action="{{ route('users.store') }} " enctype="multipart/form-data">
                 @include('admin.users.form')
  </form>
                 </div>

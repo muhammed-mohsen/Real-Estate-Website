@@ -20,6 +20,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
     <link href="{{asset("website/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
 <link href="{{asset("website/css/flexslider.css")}}" rel="stylesheet" />
@@ -28,6 +29,12 @@
 <link rel="stylesheet" href="{{asset("website/css/font-awesome.min.css")}}"/>
 <script src="{{asset("website/js/jquery.min.js")}}"></script>
 <link href="{{asset('cus/css/select2.min.css')}}" rel="stylesheet"  >
+<link href="https://fonts.googleapis.com/css?family=Markazi+Text:400,500,600,700&amp;subset=arabic,latin-ext,vietnamese" rel="stylesheet">
+<style>
+*{
+font-family: 'Markazi Text', serif;
+}
+</style>
 
 
 
@@ -44,13 +51,38 @@
   <div class="container "> <a class="navbar-brand" href="{{route('page')}}"><i class="fa fa-paper-plane"></i> عقارات</a>
     <div class="menu pull-left"> <a class="toggleMenu" href="#"><img src="{{asset("website/images/nav_icon.png")}}" alt="image" /> </a>
       <ul class="nav" id="nav">
-        <li class="current"><a href="{{route('home')}}">الرئيسية</a></li>
-        <li ><a href="{{route('allBu')}}">عرض العقارات</a></li>
+        <li class="{{setActive(['home'],'current')}}"><a href="{{route('page')}}">رئيسية</a></li>
+        <li  class="{{setActive(['showallbuilding'],'current')}}"><a href="{{route('allBu')}}">عرض العقارات</a></li>
 
+               <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" v-pre>
+                                              ايجار <span class="caret"></span>
+                                </a>
 
-        <li><a href="about.html">من نحن</a></li>
-        <li><a href="services.html">خدماتنا</a></li>
-        <li><a href="contact.html">اتصل بنا</a></li>
+                                <div class="dropdown-menu dropdown-menu-right text-right" aria-labelledby="navbarDropdown">
+                                    @foreach (bu_type() as $key=>$value)
+                                        <a class="dropdown-item" href="{{ url('/search?bu_rent=1&&bu_type='.$key)}}"
+                                       >
+                                    {{$value}}
+                                    </a>
+                                     @endforeach
+                                </div>
+                            </li>
+               <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" v-pre>
+                                               تمليك <span class="caret"></span>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right text-right" aria-labelledby="navbarDropdown">
+                                    @foreach (bu_type() as $key=>$value)
+                                        <a class="dropdown-item" href="{{ url('/search?bu_rent=0&&bu_type='.$key)}}"
+                                       >
+                                    {{$value}}
+                                    </a>
+                                     @endforeach
+                                </div>
+                            </li>
+        <li class="{{setActive(['contact_us'],'current')}}"><a href="{{route('contact_us')}}">اتصل بنا</a></li>
         @guest
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('تسجيل دخول') }}</a>
@@ -66,11 +98,34 @@
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+
+
+
+
+
+                                <div class="dropdown-menu dropdown-menu-right text-right" aria-labelledby="navbarDropdown">
+
+
+
+                            <a href="{{route('edit.user')}}" class="{{setActive(['edituser'])}}">
+                                <i class="glyphicon glyphicon-user"></i>
+                               معلوماتى الشخصية</a>
+
+
+                                       <a href="{{route('user.buildings')}}   "class="{{setActive(['userBuildings'])}}"  target="_blank">
+                                           <i class="glyphicon glyphicon-ok"></i>
+                                           عقاراتي</a>
+
+
+                            <a href="{{route('add.bu')}}" class="{{setActive(['addbu'])}}">
+                                <i class="glyphicon glyphicon-ok"></i>
+                                اضافة عقار </a>
+
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        {{ __('تسجيل الخروج') }}
                                     </a>
                                     {{-- <a class="dropdown-item" href="{{ route('users.edit-profile') }}"
                                     >
@@ -82,6 +137,7 @@
                                     </form>
                                 </div>
                             </li>
+                             <li class="{{setActive(['contact_us'],'current')}}"><a href="{{route('admin')}}">ادارة الموقع</a></li>
                         @endguest
         <div class="clear"></div>
       </ul>
@@ -114,11 +170,12 @@
   <div class="footer_bottom">
     <div class="follow-us"> <a class="fa fa-facebook social-icon" href="{{getSetting('facebook')}}"></a> <a class="fa fa-linkedin social-icon" href="{{getSetting('linkedin')}}"></a> <a class="fa fa-youtube social-icon" href="{{getSetting('youtube')}}"></a> </div>
     <div class="copy">
-      <p>Copyright &copy; 2015 Company Name. Design by <a href="http://www.templategarden.com" rel="nofollow">TemplateGarden</a></p>
+      <p>{{getSetting('footer')}} &copy; {{date('Y')}}  <a href="https://www.linkedin.com/in/muhammed-mohsen98/" rel="nofollow">Muhammed Mohsen</a></p>
     </div>
   </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <script src="{{asset('cus/js/select2.min.js')}}"></script>
 <script>
@@ -128,6 +185,20 @@ $(document).ready(function() {
     });
 });
 </script>
+ <script>
+
+    @if(Session::has('success'))
+
+     toastr.success('{{Session::get('success')}}')
+
+    @endif
+    @if(Session::has('error'))
+
+     toastr.error('{{Session::get('error')}}')
+
+    @endif
+
+    </script>
 
             @yield('footer')
 </footer>

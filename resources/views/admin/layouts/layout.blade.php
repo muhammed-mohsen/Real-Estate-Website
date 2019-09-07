@@ -155,160 +155,102 @@
           <li class="dropdown notifications-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
+              <span class="label label-warning">{{buCounter(0)}}</span>
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 10 notifications</li>
+              <li class="header"> لديك {{buCounter(0)}}   من العقارات فى انتظار التفعيل</li>
               <li>
                 <!-- inner menu: contains the actual data -->
                 <ul class="menu">
+                    @foreach (unactBu() as $key =>$bu)
                   <li>
-                    <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                    </a>
+                   <a class="pull-left" href="{{route('active.bu',[$bu->id,1])}}">
+                    <span class="text-success" >
+تفعيل العقار
+                    </span>
+                   </a>
+                   <a class="pull-right" href="{{route('bu.edit',$bu->id)}}" >
+                    <span>
+                         {{$bu->bu_name}}
+                    </span>
+                </a>
+                <div class="clearfix"></div>
                   </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
-                      page and may cause design problems
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-red"></i> 5 new members joined
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-user text-red"></i> You changed your username
-                    </a>
-                  </li>
+                  @endforeach
+
+              <li class="footer"><a href="{{route('contact.index')}}">View all</a></li>
+
                 </ul>
               </li>
-              <li class="footer"><a href="#">View all</a></li>
+              <li class="footer"><a href="{{route('contact.index')}}">View all</a></li>
+            </ul>
+          </li>
+          <li class="dropdown notifications-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-flag-o"></i>
+              <span class="label label-warning">{{counter()}}</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="header">لديك {{counter()}} من الاشعارات</li>
+              <li>
+                <!-- inner menu: contains the actual data -->
+                <ul class="menu">
+                    @foreach (unread() as $key =>$con)
+                  <li>
+                   <a href="{{route('show',$con->id)}}">
+                <h3>
+                {{$con->contact_name}}
+                <small class="pull-right">
+                 {{$con->created_at}}
+                </small>
+                </h3>
+
+                </a>
+                  </li>
+                  @endforeach
+
+              <li class="footer"><a href="{{route('contact.index')}}">View all</a></li>
+
+                </ul>
+              </li>
+              <li class="footer"><a href="{{route('contact.index')}}">View all</a></li>
             </ul>
           </li>
           <!-- Tasks: style can be found in dropdown.less -->
-          <li class="dropdown tasks-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-flag-o"></i>
-              <span class="label label-danger">9</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 9 tasks</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Design some buttons
-                        <small class="pull-right">20%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">20% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Create a nice theme
-                        <small class="pull-right">40%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-green" style="width: 40%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">40% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Some task I need to do
-                        <small class="pull-right">60%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-red" style="width: 60%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">60% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Make beautiful transitions
-                        <small class="pull-right">80%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-yellow" style="width: 80%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">80% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                </ul>
-              </li>
-              <li class="footer">
-                <a href="#">View all tasks</a>
-              </li>
-            </ul>
-          </li>
+
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="admin/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="{{asset('storage/'.Auth::user()->image)}}" class="user-image" alt="User Image">
               <span class="hidden-xs">{{Auth::user()->name}}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="{{asset('storage/'.Auth::user()->image)}}" class="img-circle" alt="User Image">
 
                 <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  {{Auth::user()->name}}
+                  <small>{{Auth::user()->created_at}}</small>
                 </p>
               </li>
               <!-- Menu Body -->
-              <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
-                  </div>
-                </div>
-                <!-- /.row -->
-              </li>
+
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="{{route('users.edit',Auth::user()->id)}}" class="btn btn-default btn-flat">ملف الشخصى</a>
                 </div>
-                <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                <div class="pull-right btn btn-default btn-flat">
+
+                    <form method="POST" action="{{ route('logout') }}">
+  @csrf
+  <button type="submit">تسجيل الخروج</button>
+</form>
+
+
+
+
                 </div>
               </li>
             </ul>
@@ -327,7 +269,7 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-right image">
-          <img src="admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="{{asset('storage/'.Auth::user()->image)}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-right info">
           <p>{{Auth::user()->name}}</p>
@@ -335,40 +277,30 @@
         </div>
       </div>
       <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-          <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
+
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">القائمة الرشيسية</li>
+        <li class="header">القائمة الرئيسية</li>
          @include('admin.layouts.nav')
 
+      </ul>
 
     </section>
     <!-- /.sidebar -->
   </aside>
 
-  <div class="control-sidebar-bg"></div>
+
   <div class="content-wrapper">
 @include('admin.layouts.message')
 
   @yield('content')
 </div>
     <footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      <b>Version</b> 2.4.13
-    </div>
-    <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE</a>.</strong> All rights
-    reserved.
+
+    <strong>برمجة عقارات &copy; {{date('Y')}}<a href="https://www.linkedin.com/in/muhammed-mohsen98/">محمد محسن عبدالعزيز</a></strong>
   </footer>
-</div>
+
 <!-- ./wrapper -->
 
 <!-- jQuery 3 -->
@@ -393,6 +325,8 @@
 <script src="{{asset('admin/plugins/jvectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
 <!-- jQuery Knob Chart -->
 <script src="{{asset('admin/bower_components/jquery-knob/dist/jquery.knob.min.js')}}"></script>
+<script src="{{asset('admin/bower_components/chart.js/Chart.js')}}"></script>
+
 <!-- daterangepicker -->
 <script src="{{asset('admin/bower_components/moment/min/moment.min.js')}}"></script>
 <script src="{{asset('admin/bower_components/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
@@ -404,12 +338,24 @@
 <script src="{{asset('admin/bower_components/jquery-slimscroll/jquery.slimscroll.min.js')}}"></script>
 <!-- FastClick -->
 <script src="{{asset('admin/bower_components/fastclick/lib/fastclick.js')}}"></script>
+
+<script src="{{asset('admin/dist/js/pages/dashboard2.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('admin/dist/js/adminlte.min.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{asset('admin/dist/js/pages/dashboard.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('admin/dist/js/demo.js')}}"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+
+    @if(Session::has('success'))
+
+     toastr.success('{{Session::get('success')}}')
+
+    @endif
+
+    </script>
 
 {{-- <script src="sweetalert2/dist/sweetalert2.all.min.js"></script>
 <script src="sweetalert2/dist/sweetalert2.min.js"></script> --}}

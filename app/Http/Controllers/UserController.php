@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Bu;
-use Illuminate\Http\Request;
-use App\Http\Requests\users\AddUserRequest;
+use App\User;
 use Datatables;
+use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\users\AddUserRequest;
 
 class UserController extends Controller
 {
@@ -39,12 +41,19 @@ class UserController extends Controller
      */
     public function store(AddUserRequest $request)
     {
+        $image = $request->image->store('user');
 
+        $filedname = $request->image->getClientOriginalName();
 
+        $path = base_path() . '/public/storage/user/' . $filedname;
+        Image::make(asset('storage/' . $image))->resize('500', '362')->save($path);
+        Storage::delete($image);
+        $image = 'user/' . $filedname;
         User::create([
             'admin' => $request->admin,
             'name' => $request->name,
             'email' => $request->email,
+            'image' => $image,
             'password' => bcrypt($request->password),
         ]);
         session()->flash('success', 'تم اضافة عضو جديد بنجاح');
@@ -70,7 +79,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.users.edit')->with('user', $user);
+        $actBu = Bu::where('user_id', $user->id)->where('bu_status', 1)->paginate(5);
+
+        $unactBu = Bu::where('user_id', $user->id)->where('bu_status', 0)->get();
+
+        return view('admin.users.edit', compact(['unactBu', 'actBu']))->with('user', $user);
     }
 
     /**
@@ -83,12 +96,23 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         // dd($request->admin);
+
+        if ($request->hasFile('image')) {
+            $filedname = $request->image->getClientOriginalName();
+
+            $path = base_path() . '/public/storage/user/' . $filedname;
+            // dd($path);
+            $image = $request->image->store('user');
+            Image::make(asset('storage/' . $image))->resize('500', '362')->save($path);
+            Storage::delete($image);
+            $image = 'user/' . $filedname;
+            Storage::delete($user->image);
+        }
         $user->update([
             'name' => $request->name,
             'admin' => $request->admin,
             'email' => $request->email,
-
-
+            'image' => $image,
         ]);
         session()->flash('success', 'تم تعديل عضو  بنجاح');
         return redirect(route('users.index'));
@@ -141,7 +165,9 @@ class UserController extends Controller
             ->editColumn('admin', function ($model) {
                 return $model->admin == 0 ? '<span class="badge badge-info">' . 'عضو' . '</span>' : '<span class="badge badge-warning">' . 'مدير الموقع' . '</span>';
             })
-
+            ->editColumn('mybu', function ($model) {
+                return '<a href="' . route('buindex', $model->id) . '" class="btn btn-info btn-circle"><i class="fa fa-link"></i></a>';
+            })
 
             // ->editColumn('mybu', function ($model) {
             //     return '<a href="' . url('/adminpanel/bu/' . $model->id) . '"> <span class="btn btn-danger btn-circle"> <i class="fa fa-link"></i> </span> </a>';
@@ -154,7 +180,7 @@ class UserController extends Controller
                     $all .= '<a href="' . route('delete', $model->id) . '" class="btn btn-danger btn-circle"><i class="fa fa-trash-o"></i></a>';
                 }
                 return $all;
-            })->rawColumns(['control', 'admin', 'name'])
+            })->rawColumns(['control', 'admin', 'name', 'bu_status', 'mybu'])
             ->make(true);
     }
 }

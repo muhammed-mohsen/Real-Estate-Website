@@ -13,9 +13,10 @@
 
 @section('content')
 
-  <div class="content-wrapper">
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
+
       <h1>
        التحكم فى العقارات
 
@@ -95,7 +96,7 @@
       <!-- /.row -->
     </section>
     <!-- /.content -->
-  </div>
+
 
 
 @endsection
@@ -155,7 +156,7 @@
         var table = $('#data').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ url('/adminpanel/bu/data') }}',
+            ajax: '{{ url('/adminpanel/bu/data') }}{{$id}}',
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'bu_name', name: 'bu_name'},

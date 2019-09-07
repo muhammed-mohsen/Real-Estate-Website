@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Bu;
+use App\User;
 use Datatables;
 use Illuminate\Http\Request;
 use App\Http\Requests\BuRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 
 class BuController extends Controller
 {
@@ -16,9 +20,19 @@ class BuController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.bu.index');
+
+        $id =  $request->id != '' ? '?user_id=' . $request->id : '';
+        return view('admin.bu.index', compact('id'));
+    }
+    public function addbu()
+    {
+        return view('website.user.addbu');
+    }
+    public function done()
+    {
+        return view('website.user.done');
     }
 
     /**
@@ -39,7 +53,16 @@ class BuController extends Controller
      */
     public function store(BuRequest $request)
     {
-        // dd($request->all());
+        // dd($request->all());'
+        // dd($request->image);
+        $image = $request->image->store('bu');
+        $filedname = $request->image->getClientOriginalName();
+
+        $path = base_path() . '/public/storage/bu/' . $filedname;
+        Image::make(asset('storage/' . $image))->resize('500', '362')->save($path);
+        Storage::delete($image);
+        $image = 'bu/' . $filedname;
+
         $data = [
             'bu_name' => $request->bu_name,
             'bu_price' =>  $request->bu_price,
@@ -54,11 +77,54 @@ class BuController extends Controller
             'bu_large_dis' => $request->bu_large_dis,
             'rooms' => $request->rooms,
             'user_id' => Auth::id(),
+            'bu_place' => $request->bu_place,
+            'month' => date('m'),
+            'year' => date('Y'),
+            'image' => $image,
+
         ];
 
         Bu::create($data);
         session()->flash('success', 'تم اضافة العقار بنجاح');
-        return redirect(route('bu.index'));
+        return redirect(route('buindex'));
+    }
+    public function add(BuRequest $request)
+    {
+        // dd($request->all());'
+        // dd($request);
+        // dd($request);
+        dd($request->image);
+        $image = $request->image->store('bu');
+        $filedname = $request->image->getClientOriginalName();
+
+        $path = base_path() . '/public/storage/bu/' . $filedname;
+        Image::make(asset('storage/' . $image))->resize('500', '362')->save($path);
+        Storage::delete($image);
+        $image = 'bu/' . $filedname;
+        $user = Auth::user() ? Auth::id() : 0;
+        $data = [
+            'bu_name' => $request->bu_name,
+            'bu_price' =>  $request->bu_price,
+            'bu_square' =>  $request->bu_square,
+            'bu_small_dis' => str_limit($request->bu_large_dis, 160),
+            'bu_meta' => $request->bu_meta,
+            'bu_longtitude' => $request->bu_longtitude,
+            'bu_latitude' => $request->bu_latitude,
+            'bu_rent' => $request->bu_rent,
+            'bu_type' => $request->bu_type,
+            'bu_large_dis' => $request->bu_large_dis,
+            'rooms' => $request->rooms,
+            'user_id' => $user,
+            'bu_place' => $request->bu_place,
+            'image' => $image,
+            'month' => date('m'),
+            'year' => date('Y'),
+
+        ];
+
+        Bu::create($data);
+        session()->flash('success', 'تم اضافة العقار بنجاح');
+        return redirect(route('done'));
     }
 
     /**
@@ -125,7 +191,7 @@ class BuController extends Controller
             }
         }
 
-        $bus = $query->paginate(1);
+        $bus = $query->paginate(15);
 
         return view('website.bu.all', compact('bus', 'array'));
     }
@@ -138,7 +204,13 @@ class BuController extends Controller
      */
     public function edit(Bu $bu)
     {
-        return view('admin.bu.edit', compact('bu'));
+        if ($bu->user_id != 0) {
+            $user = User::where('id', $bu->user_id)->first();
+        } else {
+            $user = '';
+        }
+
+        return view('admin.bu.edit', compact(['bu', 'user']));
     }
 
     /**
@@ -150,6 +222,15 @@ class BuController extends Controller
      */
     public function update(BuRequest $request, Bu $bu)
     {
+
+        // $dim = getimagesize($request->image);
+        // if ($dim[0] > 500 || $dim[1] > 300) {
+        //     session()->flash('success', 'يجب ان يكون بعد الصورة اقل من 500 * 300');
+        //     return redirect(route('bu.index'));
+        // }
+        // dd($dim);
+
+
         $data = [
             'bu_name' => $request->bu_name,
             'bu_price' =>  $request->bu_price,
@@ -165,6 +246,18 @@ class BuController extends Controller
             'rooms' => $request->rooms,
             'user_id' => Auth::id(),
         ];
+        if ($request->hasFile('image')) {
+            $filedname = $request->image->getClientOriginalName();
+
+            $path = base_path() . '/public/storage/bu/' . $filedname;
+            // dd($path);
+            $image = $request->image->store('bu');
+            Image::make(asset('storage/' . $image))->resize('500', '362')->save($path);
+            Storage::delete($image);
+            $image = 'bu/' . $filedname;
+            Storage::delete($bu->image);
+            $data['image'] = $image;
+        }
         $bu->update($data);
         session()->flash('success', 'تم تعديل العقار بنجاح');
         return redirect(route('bu.index'));
@@ -213,21 +306,35 @@ class BuController extends Controller
     }
     public function updatePassword(Request $request, User $user)
     {
-        // echo $request->password . "</br>";
-        // echo $user->name . "</br>";
-        $password = bcrypt($request->password);
-        // echo $password . "</br>";
-        $user->update([
-            'password' => $password
-        ]);
-        // dd($user->password);
-        session()->flash('success', 'تم تغيير الباسورد بنجاح');
-        return redirect()->back();
+
+
+        // dd($request->password);
+        if (!Hash::check($request->password, $user->password)) {
+            // dd('muhammed');
+            session()->flash('error', 'هذا الباسورد غير متطابق مع القديم');
+            return redirect()->back();
+        } else {
+
+
+            $password = bcrypt($request->newpassword);
+            // echo $password . "</br>";
+            $user->update([
+                'password' => $password
+            ]);
+            // dd($user->password);
+            session()->flash('success', 'تم تغيير الباسورد بنجاح');
+            return redirect()->back();
+        }
     }
-    public function anyData(Bu $bu)
+    public function anyData(Request $request, Bu $bu)
     {
 
-        $bus = $bu->all();
+        if ($request->user_id) {
+            $bus = $bu->where('user_id', $request->user_id)->get();
+        } else {
+            $bus = $bu->all();
+        }
+
 
         // dd($bus);
 
@@ -246,8 +353,9 @@ class BuController extends Controller
                 }
             })
             ->editColumn('bu_status', function ($model) {
-                return $model->bu_status == 0 ? '<span class="badge badge-info">' . 'مفعل' . '</span>' : '<span class="badge badge-warning">' . 'غير مفعل' . '</span>';
+                return $model->bu_status == 1 ? '<span class="badge badge-info">' . 'مفعل' . '</span>' : '<span class="badge badge-warning">' . 'غير مفعل' . '</span>';
             })
+
 
 
             // ->editColumn('mybu', function ($model) {
@@ -272,5 +380,63 @@ class BuController extends Controller
         $bus = Bu::where('bu_status', 1)->orderBy('id', 'desc')->paginate(15);
 
         return view('website.bu.all', compact('bus'));
+    }
+
+    public function singleshow($id)
+    {
+        $bu = Bu::find($id)->first();
+
+        if ($bu->bu_status == 0) {
+            return view('website.bu.noper', compact(['bu']));
+        }
+
+        $same_rent = Bu::where('bu_rent', $bu->bu_rent)->orderBy(DB::raw('RAND()'))->take(3)->get();
+        $same_type = Bu::where('bu_type', $bu->bu_type)->orderBy(DB::raw('RAND()'))->take(3)->get();
+
+        return view('website.bu.singleshow', compact(['bu', 'same_rent', 'same_type']));
+    }
+    public function ajexInfo(Request $request, Bu $bu)
+    {
+        return $bu->find($request->id)->toJson();
+    }
+
+    public function userBuildings()
+    {
+        $id = Auth::user()->id;
+        $bus =  Bu::where('user_id', $id)->paginate(5);
+        return view('website.user.userBuildings', ['bus' => $bus]);
+    }
+    public function editUser()
+    {
+        $user = User::find(Auth::user()->id);
+        $noruser = 0;
+        return view('website.user.edit', ['noruser' => $noruser])->with('user', $user);
+    }
+    public function updateUser(Request $request, User $user)
+    {
+        // dd($request->admin);
+
+        if ($request->email != $user->email)
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+
+
+            ]);
+        else {
+
+            $user->update([
+                'name' => $request->name,
+            ]);
+        }
+        session()->flash('success', 'تم تعديل عضو  بنجاح');
+        return redirect()->back();
+    }
+    public function activeBu(Bu $bu, $status)
+    {
+        $bu->bu_status = $status;
+        $bu->save();
+        session()->flash('success', 'تم تعديل العقار بنجاح');
+        return redirect()->back();
     }
 }

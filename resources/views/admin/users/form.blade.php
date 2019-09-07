@@ -49,8 +49,35 @@
 
 </div>
 
+  @if (isset($user))
+
+        @if ($user->image != '')
+               <div class="form-group">
 
 
+          <img src="{{asset('storage/'.$user->image)}}" width="100" class="img-responsive">
+
+
+
+    </div>
+
+        @endif
+    @endif
+
+ <div class="form-group">
+
+
+
+            <input id="image" type="file"
+                class="form-control @error('image') is-invalid @enderror" name="image"
+                value="{{isset($user)? $user->image:''}}" required autocomplete="image" autofocus>
+
+            @error('image')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+            @enderror
+ </div>
 
                             <div class="form-group">
 

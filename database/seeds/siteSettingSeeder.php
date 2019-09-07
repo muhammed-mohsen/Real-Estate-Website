@@ -50,5 +50,25 @@ class siteSettingSeeder extends Seeder
             'namesetting' => 'dis', 'type' => 1
 
         ]);
+        SiteSetting::create([
+            'slug' => 'صورة بديلة',
+            'namesetting' => 'no_image',
+
+        ]);
+        SiteSetting::create([
+            'slug' => 'صور السليدر الرئيسي فى الصفحة الرئيسية',
+            'namesetting' => 'main_slider',
+            'value' => 'slider/k9w6a6O8uLOId03IlOD5FAYczWvOsLsSXmgpU2nq.jpeg',
+            'type' => 2,
+
+        ]);
+        SiteSetting::create([
+            'slug' => 'حقوق الموقع',
+            'namesetting' => 'footer',
+            'value' => 'برمجة محمد محسن نصار',
+
+
+
+        ]);
     }
 }

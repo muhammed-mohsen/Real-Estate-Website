@@ -27,9 +27,12 @@
 
 
         <div class="col-md-10">
-            <input id="rooms" type="text"
-                class="form-control @error('rooms') is-invalid @enderror" name="rooms"
-                value="{{isset($bu)? $bu->rooms:''}}" required autocomplete="name" autofocus>
+                <select class="form-control select2" name="rooms" id="rooms">
+                                <option value="" disabled selected>عدد الغرف</option>
+                                @for ($i = 2; $i <= 40; $i++) <option value="{{$i}}">{{$i}}</option>
+                                    @endfor
+
+                            </select>
 
             @error('rooms')
             <span class="invalid-feedback" role="alert">
@@ -154,9 +157,12 @@
 
   <div class="clearfix"></div>
     <br>
+    @if (!isset($user))
      <div class="form-group">
 
         <div class="col-md-10">
+
+
 
             <select id="bu_status" type="text" class="form-control @error('bu_status') is-invalid @enderror" name="bu_status"
                 required autocomplete="name" autofocus>
@@ -177,9 +183,57 @@
             <label for="bu_rent">نوع العملية</label>
         </div>
 
+
     </div>
     <div class="clearfix"></div>
     <br>
+    @endif
+    @if (isset($bu))
+        @if ($bu->image != '')
+               <div class="form-group">
+
+        <div class="col-md-10">
+
+          <img src="{{asset('storage/'.$bu->image)}}" width="100" class="img-responsive">
+
+
+        </div>
+        <div class="col-md-2">
+            <label for="bu_rent">صورة العقار</label>
+        </div>
+
+    </div>
+    <div class="clearfix"></div>
+    <br>
+        @endif
+    @endif
+
+
+     <div class="form-group">
+
+
+        <div class="col-md-10">
+            <input id="image" type="file"
+                class="form-control @error('image') is-invalid @enderror" name="image"
+                value="{{isset($bu)? $bu->image:''}}" required autocomplete="image" autofocus>
+
+            @error('image')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+            @enderror
+        </div>
+        <div class="col-md-2">
+            <label for="image"> رفع صورة للعقار</label>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <br>
+
+
+
+
+
     <div class="form-group">
         <div class="col-md-10"> <input id="bu_meta" type="text"
                 class="form-control @error('bu_meta') is-invalid @enderror" name="bu_meta"
@@ -187,6 +241,7 @@
             <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror </div>
         <div class="col-md-2"> <label for="bu_meta">الكلمات الدلالية</label> </div>
     </div>
+    @if (!isset($user))
     <div class="form-group">
         <div class="col-md-2">
     <label for="bu_small_dis">وصف العقار لمحركات البحث</label>
@@ -207,8 +262,10 @@
 </div>
 
         </div>
+    </div>
         <div class="clearfix"></div>
     <br>
+    @endif
  <div class="form-group">
 
 
@@ -231,6 +288,7 @@
     <br>
 
 
+
      <div class="form-group">
 
 
@@ -251,7 +309,7 @@
     </div>
 
 
-    </div>
+
     <div class="clearfix"></div>
     <br>
     <div class="form-group">
@@ -277,6 +335,7 @@
     </div>
     </div>
 <div class="clearfix"></div>
+<br>
      <div class="form-group row mb-0">
         <div class="col-md-12"> <button type="submit" class="btn btn-primary">
                 {{ isset($bu)?__(' تعديل العقار '):__('اضافة عقار ') }} </button> </div>

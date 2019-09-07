@@ -9,7 +9,7 @@
 
 @section('content')
 
-  <div class="content-wrapper">
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
@@ -35,7 +35,7 @@
 
 
 
-<form action="{{route('siteSetting.save')}}" method="POST">
+<form action="{{route('siteSetting.save')}}" enctype="multipart/form-data" method="POST">
 @csrf
               @foreach ($siteSettings as $setting)
        {{-- {{dd($setting->value)}} --}}
@@ -45,6 +45,11 @@
 
 
 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="{{$setting->namesetting}}" value="{{$setting->value}}"  required autocomplete="name" autofocus>
+@elseif($setting->type == 2)
+<input id="{{$setting->namesetting}}" type="file" class="form-control @error('main_slider') is-invalid @enderror" name="{{$setting->namesetting}}" value="{{$setting->value}}"   required autocomplete="name" autofocus>
+
+
+
 @else
 <textarea id="name"  class="form-control @error('{{$setting->namesetting}}') is-invalid @enderror" name="{{$setting->namesetting}}"   required autocomplete="name" autofocus>
 {{$setting->value}}

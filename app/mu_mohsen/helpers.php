@@ -24,11 +24,29 @@ function bu_rent()
     ];
     return $array;
 }
+function bu_admin()
+{
+    $array = [
+        'عضو',
+        'مدير الموقع',
+
+    ];
+    return $array;
+}
 function bu_status()
 {
     $array = [
         'غير مفعل',
         'مفعل',
+
+    ];
+    return $array;
+}
+function viewContact()
+{
+    $array = [
+        'تمت مشاهدة',
+        'لم يتم المشاهدة',
 
     ];
     return $array;
@@ -79,4 +97,60 @@ function correct()
         'bu_square' => 'مساحة العقار',
         'bu_place' => 'المنطقة',
     ];
+}
+function image($req)
+{
+    return  $req != '' ? asset('storage/' . $req) : getSetting('no_image');
+}
+
+function address()
+{
+    return [
+        'اعجاب',
+        'مشكلة ',
+        'اقتراح',
+        'استفسار',
+
+    ];
+}
+
+
+function unread()
+{
+    return App\Contact::where('view', 1)->get();
+}
+function counter()
+{
+    return App\Contact::where('view', 1)->count();
+}
+function buCounter($status)
+{
+    return App\Bu::where('bu_status', $status)->count();
+}
+function unactBu()
+{
+    return App\Bu::where('bu_status', 0)->get();
+}
+
+function setActive($array, $class = 'active')
+{
+
+    if (!empty($array)) {
+        $seg_array = [];
+        foreach ($array as $key => $url) {
+            if (Request::segment($key + 1) == $url) {
+                $seg_array[] = $key;
+            }
+        }
+        if (count($seg_array) == count(Request::segments())) {
+            return $class;
+        }
+    }
+}
+
+function mybuildings()
+{
+    $user = Auth::user()->id;
+
+    return App\Bu::where('user_id', $user)->count();
 }
